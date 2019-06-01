@@ -1,4 +1,9 @@
+import { Example } from './example-table/example';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs/observable';
+import { of } from 'rxjs/observable/of';
+import { delay, map, startWith } from 'rxjs/operators';
+import { names } from '../app/name';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +11,29 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'virtualScroll3';
+  delay = 2000;
+  examples: Observable<Example[]>;
+  pending: Observable<boolean>;
+  sticky: boolean;
+
+  constructor() {
+    this.fetch();
+  }
+
+  fetch() {
+    this.examples = of(
+      
+      names.map((name) => ( name ))
+    ).pipe(
+      delay(this.delay),
+      startWith([])
+    );
+    this.pending = this.examples.pipe(
+      
+      map(data => data.length === 0)
+    );
+  
+  }
+
+  
 }
